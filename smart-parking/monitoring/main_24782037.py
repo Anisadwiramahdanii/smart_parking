@@ -2,59 +2,63 @@
 Nama file: main_24782037.py
 
 Deskripsi:
-    Modul utama dalam paket 'monitoring' yang berfungsi untuk menerima input
-    nomor kendaraan yang akan parkir, memvalidasi nomor tersebut, dan
-    menyimpan informasi kendaraan yang terparkir dengan memanfaatkan fungsi
-    dari modul 'parking_simulator' dalam paket 'simulator'.
-
-Fitur utama:
-    - Menerima input nomor kendaraan dari pengguna.
-    - Memvalidasi format nomor kendaraan.
-    - Menyimpan informasi kendaraan yang telah divalidasi.
+    Program utama Smart Parking dengan menu interaktif untuk menambah slot,
+    memarkir kendaraan, mengeluarkan kendaraan, dan mengecek status parkir.
 
 Penulis: Anisa Dwi Ramahdani
 Tanggal: 26 Maret 2025
 """
 
 import sys
-from os.path import abspath, dirname
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Menambahkan direktori induk ke sys.path untuk memungkinkan impor paket 'simulator'
-sys.path.append(dirname(dirname(abspath(__file__))))
 
-from simulator import parking_simulator
+from simulator.parking_simulator import (
+    tambah_slot_parkir,
+    parkir_kendaraan,
+    kendaraan_keluar,
+    cek_status_parkir
+)
+
 
 def main():
     """
-    Fungsi utama yang mengelola proses input, validasi, dan penyimpanan
-    nomor kendaraan yang akan parkir.
-
-    Proses:
-        1. Meminta input nomor kendaraan dari pengguna.
-        2. Memvalidasi format nomor kendaraan menggunakan fungsi
-           'validasi_nomor_kendaraan' dari modul 'parking_simulator'.
-        3. Jika valid, menyimpan nomor kendaraan menggunakan fungsi
-           'simpan_kendaraan_terparkir' dari modul yang sama dan menampilkan
-           pesan sukses.
-        4. Jika tidak valid, menampilkan pesan kesalahan.
-
-    Parameter:
-        Tidak ada.
-
-    Nilai yang dikembalikan:
-        Tidak ada.
-
-    Contoh penggunaan:
-        Jalankan skrip ini secara langsung. Pengguna akan diminta untuk
-        memasukkan nomor kendaraan, dan sistem akan memproses sesuai dengan
-        logika yang telah dijelaskan.
+    Fungsi utama yang menampilkan menu interaktif dan menjalankan
+    fitur-fitur parkir sesuai pilihan pengguna.
     """
-    nomor_kendaraan = input("Masukkan nomor kendaraan yang akan parkir: ")
-    if parking_simulator.validasi_nomor_kendaraan(nomor_kendaraan):
-        parking_simulator.simpan_kendaraan_terparkir(nomor_kendaraan)
-        print(f"Kendaraan dengan nomor {nomor_kendaraan} berhasil diparkir.")
-    else:
-        print("Nomor kendaraan tidak valid. Silakan coba lagi.")
+    while True:
+        print("\n=== SMART PARKING SYSTEM ===")
+        print("1. Tambah Slot Parkir")
+        print("2. Masuk Parkir")
+        print("3. Keluar Parkir")
+        print("4. Cek Status Parkir")
+        print("5. Keluar Program")
+        pilihan = input("Pilih menu (1-5): ")
+
+        if pilihan == '1':
+            try:
+                jumlah_input = input(
+                    "Masukkan jumlah slot parkir yang ingin ditambahkan: "
+                )
+                jumlah = int(jumlah_input)
+                tambah_slot_parkir(jumlah)
+            except ValueError:
+                print("Input tidak valid. Harus berupa angka.")
+        elif pilihan == '2':
+            nomor = input("Masukkan nomor kendaraan: ")
+            parkir_kendaraan(nomor)
+        elif pilihan == '3':
+            nomor = input("Masukkan nomor kendaraan yang akan keluar: ")
+            kendaraan_keluar(nomor)
+        elif pilihan == '4':
+            cek_status_parkir()
+        elif pilihan == '5':
+            print("Terima kasih telah menggunakan Smart Parking!")
+            break
+        else:
+            print("Pilihan tidak valid. Silakan coba lagi.")
+
 
 if __name__ == "__main__":
     main()

@@ -1,50 +1,46 @@
-"""
-Nama file: parking_simulator.py
+# simulator/parking_simulator.py
 
-Deskripsi:
-    Modul ini menyediakan fungsi-fungsi untuk validasi dan penyimpanan
-    nomor kendaraan dalam sistem parkir.
+parkiran = []
 
-Fitur utama:
-    - Validasi format nomor kendaraan.
-    - Penyimpanan informasi kendaraan yang telah divalidasi.
 
-Penulis: Anisa Dwi Ramahdani
-Tanggal: 26 Maret 2025
-"""
-
-def validasi_nomor_kendaraan(nomor):
+def tambah_slot_parkir(jumlah):
     """
-    Memvalidasi format nomor kendaraan berdasarkan pola tertentu.
-
-    Parameter:
-        nomor (str): Nomor kendaraan yang akan divalidasi.
-
-    Returns:
-        bool: True jika format nomor kendaraan valid, False jika tidak.
-
-    Contoh penggunaan:
-        >>> validasi_nomor_kendaraan('B 1234 CD')
-        True
-        >>> validasi_nomor_kendaraan('1234 AB')
-        False
+    Menambahkan sejumlah slot parkir kosong.
     """
-    import re
-    pola = r'^[A-Z]{1,2} \d{1,4} [A-Z]{1,3}$'
-    return re.match(pola, nomor) is not None
+    global parkiran
+    parkiran.extend([None] * jumlah)
+    print(f"{jumlah} slot parkir berhasil ditambahkan.")
 
-def simpan_kendaraan_terparkir(nomor):
+
+def parkir_kendaraan(nomor):
     """
-    Menyimpan nomor kendaraan yang telah divalidasi ke dalam daftar parkir.
-
-    Parameter:
-        nomor (str): Nomor kendaraan yang akan disimpan.
-
-    Returns:
-        None
-
-    Contoh penggunaan:
-        >>> simpan_kendaraan_terparkir('B 1234 CD')
-        Kendaraan dengan nomor B 1234 CD telah disimpan dalam daftar parkir.
+    Memarkir kendaraan ke slot kosong pertama.
     """
-    print(f"Kendaraan dengan nomor {nomor} telah disimpan dalam daftar parkir.")
+    for i in range(len(parkiran)):
+        if parkiran[i] is None:
+            parkiran[i] = nomor
+            print(f"Kendaraan {nomor} diparkir di slot {i + 1}.")
+            return
+    print("Maaf, semua slot penuh.")
+
+
+def kendaraan_keluar(nomor):
+    """
+    Mengeluarkan kendaraan dari slot jika ditemukan.
+    """
+    for i in range(len(parkiran)):
+        if parkiran[i] == nomor:
+            parkiran[i] = None
+            print(f"Kendaraan {nomor} keluar dari slot {i + 1}.")
+            return
+    print(f"Kendaraan {nomor} tidak ditemukan.")
+
+
+def cek_status_parkir():
+    """
+    Menampilkan status semua slot parkir.
+    """
+    print("\nStatus Parkir:")
+    for i, kendaraan in enumerate(parkiran):
+        status = kendaraan if kendaraan else "Kosong"
+        print(f"Slot {i + 1}: {status}")
